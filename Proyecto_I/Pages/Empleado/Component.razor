@@ -1,0 +1,44 @@
+﻿@page "/ListaTareas"
+
+<h3 class="text-center">Lista de Tareas</h3>
+
+<div class="container">
+    <input type="text" class="form-control" placeholder="Nueva tarea..." @bind-value="nuevaTarea">
+    <button class="btn btn-primary" @onclick="AgregarTarea">Agregar</button>
+
+    <ul class="list-group">
+        @foreach (var tarea in tareas)
+        {
+            <li class="list-group-item">
+                <input type="checkbox" @bind-value="tarea.Completada">
+                <span class="@(tarea.Completada ? "text-muted" : "")">@tarea.Descripcion</span>
+                <button class="btn btn-sm btn-danger float-right" @onclick="@(() => EliminarTarea(tarea))">X</button>
+            </li>
+        }
+    </ul>
+</div>
+
+@code {
+    private List<Tarea> tareas = new List<Tarea>();
+    private string nuevaTarea = "";
+
+    private void AgregarTarea()
+    {
+        if (!string.IsNullOrEmpty(nuevaTarea))
+        {
+            tareas.Add(new Tarea { Descripcion = nuevaTarea, Completada = false });
+            nuevaTarea = "";
+        }
+    }
+
+    private void EliminarTarea(Tarea tarea)
+    {
+        tareas.Remove(tarea);
+    }
+
+    public class Tarea
+    {
+        public string Descripcion { get; set; }
+        public bool Completada { get; set; }
+    }
+}
